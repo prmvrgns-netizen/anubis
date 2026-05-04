@@ -110,14 +110,24 @@ window.addArchive = async function() {
 };
 
 
-window.deleteArchive = function(id) {
+window.deleteArchive = async function(id) {
     if(!confirm("이 추억을 삭제하시겠습니까?")) return;
-    let archive = JSON.parse(localStorage.getItem('anubis_archive')) || [];
-    archive = archive.filter(item => String(item.id) !== String(id));
-    localStorage.setItem('anubis_archive', JSON.stringify(archive));
-    window.closeModal();
-    window.loadArchive();
+    
+    try {
+        // 1. 파이어베이스(Firestore) 서버에서 해당 ID의 문서를 삭제
+        await deleteDoc(doc(db, "archive", id));
+        
+        alert("삭제되었습니다.");
+        
+        // 2. 모달창 닫고 목록 새로고침
+        window.closeModal();
+        window.loadArchive();
+    } catch (e) {
+        console.error("삭제 실패:", e);
+        alert("삭제 중 오류가 발생했습니다.");
+    }
 };
+
 
 window.loadArchive = async function() {
     const grid = document.getElementById('archive-grid');
