@@ -114,23 +114,34 @@ window.addArchive = async function() {
 };
 
 
-window.deleteArchive = async function(id) {
-    if(!confirm("이 추억을 삭제하시겠습니까?")) return;
+// --- [아카이브 삭제 기능: 암호 확인 필수] ---
+window.deleteArchive = async function(id, correctPw) {
+    // 1. 사용자에게 암호 입력받기
+    const inputPw = prompt("삭제를 위해 본인 암호 또는 마스터 암호를 입력하세요.");
     
-    try {
-        // 1. 파이어베이스(Firestore) 서버에서 해당 ID의 문서를 삭제
-        await deleteDoc(doc(db, "archive", id));
+    // 2. 취소를 눌렀거나 빈 칸이면 중단
+    if (inputPw === null) return;
+
+    // 3. 입력한 암호가 게시물 암호(correctPw)와 같거나, 레나의 마스터 암호(MASTER_PW)와 같으면 삭제 실행
+    if (inputPw === correctPw || inputPw === MASTER_PW) {
+        if(!confirm("이 소중한 추억을 정말 삭제하시겠습니까?")) return;
         
-        alert("삭제되었습니다.");
-        
-        // 2. 모달창 닫고 목록 새로고침
-        window.closeModal();
-        window.loadArchive();
-    } catch (e) {
-        console.error("삭제 실패:", e);
-        alert("삭제 중 오류가 발생했습니다.");
+        try {
+            await deleteDoc(doc(db, "archive", id));
+            alert("성공적으로 삭제되었습니다.");
+            
+            window.closeModal(); // 크게 보기 창 닫기
+            window.loadArchive(); // 목록 새로고침
+        } catch (e) {
+            console.error("삭제 실패:", e);
+            alert("서버 오류로 삭제에 실패했습니다.");
+        }
+    } else {
+        // 4. 암호가 틀렸을 때
+        alert("암호가 일치하지 않습니다. 다시 확인해주세요.");
     }
 };
+
 
 
 window.loadArchive = async function() {
