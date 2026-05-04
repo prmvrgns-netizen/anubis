@@ -119,16 +119,33 @@ window.deleteArchive = function(id) {
     window.loadArchive();
 };
 
-window.loadArchive = function() {
+window.loadArchive = async function() {
     const grid = document.getElementById('archive-grid');
     if (!grid) return;
-    const archive = JSON.parse(localStorage.getItem('anubis_archive')) || [];
-    grid.innerHTML = archive.map(item => `
-        <div class="archive-item" onclick="window.openPhotoModal('${item.id}', '${item.img}', '${item.name}', '${item.content}')">
-            <img src="${item.img}" style="width:100%; aspect-ratio:1/1; object-fit:cover; border:1px solid #222;">
-        </div>
-    `).join('');
+    
+    try {
+        // 1. 서버(Firestore)에서 "archive" 폴더에 있는 데이터들 가져오기
+        const q = query(collection(db, "archive"), orderBy("date", "desc"));
+        const snap = await getDocs(q);
+        
+        let html = "";
+        
+        // 2. 서버에서 가져온 사진들을 하나씩 화면에 그리기
+        snap.forEach((d) => {
+            const item = d.data();
+            html += `
+                <div class="archive-item" onclick="window.openPhotoModal('${d.id}', '${item.img}', '${item.name}', '${item.content}')">
+                    <img src="${item.img}" style="width:100%; aspect-ratio:1/1; object-fit:cover; border:1px solid #222;">
+                </div>
+            `;
+        });
+        
+        grid.innerHTML = html || "<div style='color:#444; text-align:center;'>아직 기록된 추억이 없어요.</div>";
+    } catch (e) {
+        console.error("데이터 불러오기 실패:", e);
+    }
 };
+
 
 window.openPhotoModal = function(id, src, name, content) {
     const modal = document.getElementById('photo-modal');
