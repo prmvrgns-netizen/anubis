@@ -234,3 +234,26 @@ window.addEventListener('DOMContentLoaded', () => {
     window.loadArchive(); 
     window.loadGuestbook(); 
 });
+window.openPhotoModal = function(id, src, name, content, pw) {
+    const modal = document.getElementById('photo-modal');
+    if (!modal) return;
+    
+    const modalImg = document.getElementById('modal-img');
+    if (modalImg) modalImg.src = src;
+    
+    const caption = document.getElementById('modal-caption');
+    if (caption) {
+        caption.innerHTML = `
+            <!-- 닉네임과 삭제 버튼을 한 줄에 배치 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="color: #D4C56E; font-weight: bold; font-size: 1.1rem;">${name}</div>
+                <button onclick="window.deleteArchive('${id}', '${pw}')" style="background: none; border: 1px solid #444; color: #666; padding: 5px 10px; cursor: pointer; font-size: 0.7rem; border-radius: 3px;">삭제하기</button>
+            </div>
+            
+            <!-- 내용 부분 -->
+            <div style="font-size: 0.9rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; white-space: pre-wrap;">${content}</div>
+        `;
+    }
+    
+    modal.style.display = "flex"; 
+};
