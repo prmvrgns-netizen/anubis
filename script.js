@@ -16,6 +16,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+// [관리자 설정] 레나만 아는 마스터 암호 & 길드 인증코드
+const MASTER_PW = "rlaclWla101"; // 모든 게시물을 삭제할 수 있는 마스터 코드
+const GUILD_CODE = "2026050411";  // 아카이브에 사진을 올릴 때 필요한 길드원 인증 코드
+
 // --- [1. 가입 신청 및 페이지 제어] ---
 window.showPage = function(pageId) {
     document.querySelectorAll('.page').forEach(p => { 
