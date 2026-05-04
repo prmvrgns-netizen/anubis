@@ -198,7 +198,7 @@
             <input type="password" id="arc-pw" placeholder="암호 (삭제 시 본인 확인용)" style="width: 100%; background:#000; border:1px solid #444; color:#fff; padding:12px; box-sizing: border-box; outline: none;">
             
             <input type="file" id="arc-file" accept="image/*" style="color:#888; font-size: 0.8rem; padding: 5px 0;">
-            <textarea id="arc-content" placeholder="내용을 입력하세요..." style="width: 100%; background:#000; border:1px solid #444; color:#fff; padding:12px; min-height:100px; box-sizing: border-box; resize: none; outline: none;"></textarea>
+            <textarea id="arc-content" placeholder="내용을 입력하세요... (부적절한 게시물은 예고 없이 삭제될 수 있습니다.)" style="width: 100%; background:#000; border:1px solid #444; color:#fff; padding:12px; min-height:100px; box-sizing: border-box; resize: none; outline: none;"></textarea>
             
             <button onclick="addArchive()" style="width: 100%; background:#D4C56E; color:#000; font-weight:bold; border:none; padding:15px; cursor:pointer; margin-top: 10px; border-radius: 5px;">추억 올리기</button>
         </div>
@@ -208,7 +208,7 @@
 <!-- 방명록 섹션 -->
 <section id="guestbook" class="page" style="width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 50px; border-top: 1px solid #222; padding-top: 50px;">
     <h2 class="title">GUESTBOOK</h2>
-    <p class="desc" style="font-weight: 100; color: #fff; text-align: center;">방명록을 남겨 보세요!<br>부적절한 게시물은 예고 없이 삭제될 수 있습니다. </p>
+    <p class="desc" style="font-weight: 100; color: #fff; text-align: center;">방명록을 남겨 보세요! </p>
     <div style="text-align: center; margin: 20px 0; width: 100%;">
         <button onclick="openGbModal()" style="background: none; border: 1px solid #D4C56E; color: #D4C56E; width: 90%; max-width: 510px; padding: 15px; cursor: pointer; font-size: 0.9rem; font-weight: 100;">+ 방명록 작성하기</button>
     </div>
@@ -230,7 +230,7 @@
                 <input type="text" id="gb-name" placeholder="닉네임" style="width: 50%; background:#000; border:1px solid #444; color:#fff; padding:12px; box-sizing: border-box; outline: none;">
                 <input type="password" id="gb-pw" placeholder="암호 (삭제 시 본인 확인용)" style="width: 50%; background:#000; border:1px solid #444; color:#fff; padding:12px; box-sizing: border-box; outline: none;">
             </div>
-            <textarea id="gb-content" placeholder="내용을 입력하세요..." style="width: 100%; background:#000; border:1px solid #444; color:#fff; padding:12px; min-height:120px; box-sizing: border-box; resize: none; outline: none;"></textarea>
+            <textarea id="gb-content" placeholder="내용을 입력하세요... (부적절한 게시물은 예고 없이 삭제될 수 있습니다.)" style="width: 100%; background:#000; border:1px solid #444; color:#fff; padding:12px; min-height:120px; box-sizing: border-box; resize: none; outline: none;"></textarea>
             <button onclick="addGuestbook()" style="width: 100%; background:#D4C56E; color:#000; font-weight:bold; border:none; padding:15px; cursor:pointer; border-radius: 5px; margin-top: 10px;">작성 완료</button>
         </div>
     </div>
