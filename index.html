@@ -171,6 +171,29 @@
         <button onclick="closeModal()" style="margin-top: 20px; background: none; border: 1px solid #444; color: #888; padding: 8px 20px; cursor: pointer; font-size: 0.8rem; border-radius: 5px;">[ 닫기 ]</button>
     </div>
 </div>
+window.openPhotoModal = function(id, src, name, content, pw) {
+    const modal = document.getElementById('photo-modal');
+    if (!modal) return;
+    
+    // 1. 큰 이미지 소스 넣기
+    const modalImg = document.getElementById('modal-img');
+    if (modalImg) modalImg.src = src;
+    
+    // 2. 닉네임, 내용, 삭제버튼 넣기
+    const caption = document.getElementById('modal-caption');
+    if (caption) {
+        caption.innerHTML = `
+            <div style="margin-bottom:10px; color:#D4C56E; font-weight:bold; font-size:1.1rem;">${name}</div>
+            <div style="font-size:0.9rem; color:#ccc; margin-bottom:20px; line-height:1.5; white-space:pre-wrap;">${content}</div>
+            <div style="text-align:right;">
+                <button onclick="window.deleteArchive('${id}', '${pw}')" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:5px 10px; cursor:pointer; font-size:0.7rem; border-radius:3px;">이 추억 삭제하기</button>
+            </div>
+        `;
+    }
+    
+    // 3. 모달창 보이게 하기
+    modal.style.display = "flex"; 
+};
 
 <!-- [수정] 추억 기록하기 입력 모달 -->
 <div id="upload-modal" style="
