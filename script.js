@@ -134,13 +134,11 @@ window.loadArchive = async function() {
     if (!grid) return;
     
     try {
-        // 1. 서버(Firestore)에서 "archive" 폴더에 있는 데이터들 가져오기
+        // 서버에서만 가져오기 (localStorage는 이제 안 써!)
         const q = query(collection(db, "archive"), orderBy("date", "desc"));
         const snap = await getDocs(q);
         
         let html = "";
-        
-        // 2. 서버에서 가져온 사진들을 하나씩 화면에 그리기
         snap.forEach((d) => {
             const item = d.data();
             html += `
@@ -150,11 +148,13 @@ window.loadArchive = async function() {
             `;
         });
         
+        // 데이터가 없으면 '비어있음'만 띄우기
         grid.innerHTML = html || "<div style='color:#444; text-align:center;'>아직 기록된 추억이 없어요.</div>";
     } catch (e) {
         console.error("데이터 불러오기 실패:", e);
     }
 };
+
 
 
 window.openPhotoModal = function(id, src, name, content) {
