@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjCg5p8Xd-Bj5FvxXaDcf05jDPUopL8CU",
@@ -13,6 +14,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // --- [1. 가입 신청 및 페이지 제어] ---
 window.showPage = function(pageId) {
@@ -73,24 +75,40 @@ window.closeUploadModal = function() {
     if (modal) modal.style.display = 'none'; 
 };
 
-window.addArchive = function() {
+// --- [아카이브: 사진 서버 업로드 및 저장] ---
+window.addArchive = async function() {
+    // 1. 입력창에서 값 가져오기
     const name = document.getElementById('arc-name').value;
     const file = document.getElementById('arc-file').files[0];
     const content = document.getElementById('arc-content').value;
 
-    if (!name || !file || !content) return alert("빈칸을 입력해 주세요.");
+    // 2. 비어있는 칸이 있는지 확인
+    if (!name || !file || !content) return alert("모든 내용을 입력해 주세요.");
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const entry = { id: Date.now(), name, img: e.target.result, content };
-        let archive = JSON.parse(localStorage.getItem('anubis_archive')) || [];
-        archive.unshift(entry);
-        localStorage.setItem('anubis_archive', JSON.stringify(archive));
-        window.closeUploadModal();
-        window.loadArchive();
-    };
-    reader.readAsDataURL(file);
+    try {
+        // 3. Storage(창고)에 사진 파일 먼저 업로드 (시간을 붙여서 이름 중복 방지)
+        const storageRef = ref(storage, 'archive/' + Date.now() + "_" + file.name);
+        const snapshot = await uploadBytes(storageRef, file);
+        
+        // 4. 업로드된 사진의 진짜 인터넷 주소(URL) 가져오기
+        const downloadURL = await getDownloadURL(snapshot.ref);
+
+        // 5. Firestore(데이터베이스)에 사진 주소와 내용을 기록
+        await addDoc(collection(db, "archive"), {
+            name: name,
+            img: downloadURL, // 파일 대신 '주소'를 저장하는 게 핵심!
+            content: content,
+            date: Date.now()
+        });
+
+        alert("추억이 저장되었습니다!");
+        location.reload(); // 새로고침해서 올린 사진 바로 확인하기
+    } catch (e) {
+        console.error(e);
+        alert("업로드 실패!");
+    }
 };
+
 
 window.deleteArchive = function(id) {
     if(!confirm("이 추억을 삭제하시겠습니까?")) return;
