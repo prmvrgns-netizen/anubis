@@ -92,9 +92,9 @@
 /*메인 Hero 섹션 부제*/.slogan { 
     margin-top: -5px !important; color: var(--gray); font-size: 0.85rem; 
 }
-/*페이지 기본 설정*/.page { display: none; padding: 120px 10% 0; min-height: 100vh; }
+/*페이지 기본 설정*/.page { display: none; width: 100%; padding: 120px 10% 60px; min-height: 100vh; box-sizing: border-box; overflow-x: hidden; }
 /*페이지 기본 설정*/.page.active { display: flex !important; flex-direction: column; }
-/*페이지 기본 설정*/#main.page.active { justify-content: center; align-items: center; padding-top: 0; }
+/*페이지 기본 설정*/ #main.page.active { justify-content: center; align-items: center; padding-top: 0; height: 100vh; }
 /*페이지 기본 설정*/.title { color: var(--gold); font-size: 2rem; margin-bottom: 25px; letter-spacing: 5px; }
 /*페이지 기본 설정*/.desc { font-size: 0.85rem; color: var(--gray); margin-bottom: 15px; line-height: 1.8; }
 /*팝업 폰트 크기*/ .popup-content p {
